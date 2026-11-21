@@ -16,7 +16,8 @@
 ## Munkanapló
 
 |Dátum|Ki|Mi készült el vagy miben állapodtunk meg?|Következő lépés vagy commit|
-|-|-|-|-|
+|2026.11.20|Gargya Dániel|Menü kiírása a rajzlap keretével együtt|-|
+|2026.11.21|Gargya Dániel|Mozgás a rajzlapon és adatok kiírása a menüben(pozició stb.)|-|
 |…|…|…|…|
 
 ## Másik pár tesztje
