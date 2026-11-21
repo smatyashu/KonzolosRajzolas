@@ -1,26 +1,22 @@
-﻿
-namespace projektcucc
+﻿namespace rajzolo
 {
     internal class Program
     {
-        static bool rajzole = true;
-        static int kurzorX;
-        static int kurzorY;
+        static bool rajzole = false;
+        static int kurzorPozBalrol = 65;
+        static int kurzorPozFentrol = 12;
+        static char jelenlegiKarakter = '#';
+        static ConsoleColor jelenlegiSzin = ConsoleColor.White;
 
         static void menuRajzolas(int magassag, int szelesseg)
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine("=== KONZOLOS RAJZOLÓ ===");
             Console.WriteLine(" M - Menü megnyitása");
-            Console.WriteLine(" X - Kilépés");
-            Console.WriteLine();
-            Console.WriteLine($" Pozíció: ({kurzorX}, {kurzorY})");
-            Console.WriteLine(" Karakter: {currentSkin}");
-            Console.WriteLine(" Szín: {currentColor}");
-            Console.WriteLine($" Eszköz: {(rajzole ? "letéve" : "felemelve")}");
+            Console.WriteLine(" Esc - Kilépés");
             Console.WriteLine();
             Console.WriteLine(" Nyilak: mozgás");
-            Console.WriteLine(" Szóköz: eszköz váltás");
+            Console.WriteLine(" Szóköz: eszköz letétele/felvétele");
             Console.WriteLine(" F1-F12: alakzat nyomdák");
             Console.WriteLine();
             Console.SetCursorPosition(40, 0);
@@ -54,14 +50,76 @@ namespace projektcucc
         {
             menuRajzolas(25, 50);
             bool fut = true;
+            Console.SetCursorPosition(65, 12);
             while (fut)
             {
                 ConsoleKey billentyu = Console.ReadKey(true).Key;
-                Console.SetCursorPosition(0, 20);
-                Console.Write(("Billentyű: " + billentyu).PadRight(75));
-
+                Console.SetCursorPosition(0, 10);
+                if (billentyu == ConsoleKey.UpArrow)
+                {
+                    Console.WriteLine(" Billentyű: Felfelé nyíl");
+                }
+                else if (billentyu == ConsoleKey.DownArrow)
+                {
+                    Console.WriteLine(" Billentyű: Lefelé nyíl");
+                }
+                else if (billentyu == ConsoleKey.LeftArrow)
+                {
+                    Console.WriteLine(" Billentyű: Bal nyíl");
+                }
+                else if (billentyu == ConsoleKey.RightArrow)
+                {
+                    Console.WriteLine(" Billentyű: Jobb nyíl");
+                }
+                else
+                {
+                    Console.WriteLine((" Billentyű: " + billentyu).PadRight(40));
+                }
+                Console.WriteLine(($" Pozíció: ({kurzorPozBalrol - 41}, {kurzorPozFentrol - 1})").PadRight(20));
+                Console.WriteLine($" Karakter: {jelenlegiKarakter}");
+                Console.WriteLine($" Szín: {jelenlegiSzin}");
+                Console.WriteLine($" Eszköz: {(rajzole ? "letéve" : "felemelve")}");
+                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
                 switch (billentyu)
                 {
+                    case ConsoleKey.UpArrow:
+                        if (kurzorPozFentrol > 1)
+                        {
+                            kurzorPozFentrol--;
+                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                        }
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (kurzorPozFentrol < 24)
+                        {
+                            kurzorPozFentrol++;
+                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                        }
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (kurzorPozBalrol > 41)
+                        {
+                            kurzorPozBalrol--;
+                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                        }
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (kurzorPozBalrol < 90)
+                        {
+                            kurzorPozBalrol++;
+                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                        }
+                        break;
+                    case ConsoleKey.Spacebar:
+                        if (rajzole)
+                        {
+                            rajzole = false;
+                        }
+                        else
+                        {
+                            rajzole = true;
+                        }
+                        break;
                     case ConsoleKey.F1:
                         Console.SetCursorPosition(26, 4); // oszlop, majd sor
                         Console.ForegroundColor = ConsoleColor.Cyan;
