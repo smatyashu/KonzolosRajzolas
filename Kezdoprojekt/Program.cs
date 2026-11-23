@@ -1,4 +1,8 @@
-﻿namespace rajzolo
+﻿
+using System;
+using System.IO;
+
+namespace rajzolo
 {
     internal class Program
     {
@@ -10,7 +14,6 @@
 
         static void menuRajzolas(int magassag, int szelesseg)
         {
-
             Console.SetCursorPosition(40, 0);
 
             for (int sor = 0; sor <= magassag; sor++)
@@ -39,9 +42,56 @@
             }
         }
 
+
+        static void Nyomda(string[] minta)
+        {
+            int kozep = minta.Length / 2;
+
+
+            if (kurzorPozBalrol - kozep < 41 ||
+                kurzorPozBalrol + kozep > 90 ||
+                kurzorPozFentrol - kozep < 1 ||
+                kurzorPozFentrol + kozep > 24)
+            {
+                if (OperatingSystem.IsWindows())
+                    Console.Beep(800, 120);
+                else
+                    Console.Write("\a");
+
+                return;
+            }
+
+
+            for (int sor = 0; sor < minta.Length; sor++)
+            {
+
+                for (int oszlop = 0; oszlop < minta[sor].Length; oszlop++)
+                {
+
+                    if (minta[sor][oszlop] == '#')
+                    {
+                        Console.SetCursorPosition(
+                            kurzorPozBalrol + oszlop - kozep,
+                            kurzorPozFentrol + sor - kozep
+                        );
+
+                        KarakterKiirasa();
+                    }
+                }
+            }
+
+            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+        }
+
         static void belsoMenu()
         {
-            string[] menupontok = { "Szín választása", "Karakter választása", "Ugrás középre", "Vissza a rajzolóhoz" };
+            string[] menupontok = {
+                "Szín választása",
+                "Karakter választása",
+                "Ugrás középre",
+                "Vissza a rajzolóhoz"
+            };
+
             int pozicio = 0;
             bool menuben = true;
 
@@ -56,6 +106,7 @@
                     Console.SetCursorPosition(0, i + 2);
                     Console.Write((i == pozicio ? "->" : "  ") + menupontok[i].PadRight(38));
                 }
+
                 Console.WriteLine();
                 Console.Write("".PadRight(40));
 
@@ -64,14 +115,17 @@
                 Console.Write("Nyilak: választás \n Enter: kiválasztás \n Esc: vissza".PadRight(65));
 
                 ConsoleKey billentyu = Console.ReadKey(true).Key;
+
                 switch (billentyu)
                 {
                     case ConsoleKey.DownArrow:
                         pozicio = (pozicio + 1) % menupontok.Length;
                         break;
+
                     case ConsoleKey.UpArrow:
                         pozicio = (pozicio - 1 + menupontok.Length) % menupontok.Length;
                         break;
+
                     case ConsoleKey.Enter:
                         if (pozicio == 0)
                         {
@@ -92,6 +146,7 @@
                             menuben = false;
                         }
                         break;
+
                     case ConsoleKey.Escape:
                         menuben = false;
                         break;
@@ -126,24 +181,29 @@
             {
                 Console.SetCursorPosition(0, 0);
                 Console.WriteLine("=== SZÍN VÁLASZTÁSA ===".PadRight(40));
-                Console.WriteLine($"Bal/Jobb: váltás | Enter: alkalmaz | Esc: vissza".PadRight(40));
+                Console.WriteLine("Bal/Jobb: váltás \n Enter: alkalmaz Esc: vissza".PadRight(40));
+
                 Console.ForegroundColor = szinek[index];
                 Console.WriteLine($"  Kiválasztott szín: {szinek[index]}".PadRight(40));
                 Console.ResetColor();
 
                 ConsoleKey billentyu = Console.ReadKey(true).Key;
+
                 switch (billentyu)
                 {
                     case ConsoleKey.RightArrow:
                         index = (index + 1) % szinek.Length;
                         break;
+
                     case ConsoleKey.LeftArrow:
                         index = (index - 1 + szinek.Length) % szinek.Length;
                         break;
+
                     case ConsoleKey.Enter:
                         jelenlegiSzin = szinek[index];
                         valaszt = false;
                         break;
+
                     case ConsoleKey.Escape:
                         valaszt = false;
                         break;
@@ -153,7 +213,11 @@
 
         static void KarakterValasztas()
         {
-            char[] karakterek = { '#', '*', '+', 'x', 'o', '@', '%', '&', '=', '~', '$', '!' };
+            char[] karakterek = {
+                '#', '*', '+', 'x', 'o', '@',
+                '%', '&', '=', '~', '$', '!'
+            };
+
             int index = Array.IndexOf(karakterek, jelenlegiKarakter);
             bool valaszt = true;
 
@@ -165,18 +229,22 @@
                 Console.WriteLine($"  Kiválasztott karakter: {karakterek[index]}".PadRight(40));
 
                 ConsoleKey billentyu = Console.ReadKey(true).Key;
+
                 switch (billentyu)
                 {
                     case ConsoleKey.RightArrow:
                         index = (index + 1) % karakterek.Length;
                         break;
+
                     case ConsoleKey.LeftArrow:
                         index = (index - 1 + karakterek.Length) % karakterek.Length;
                         break;
+
                     case ConsoleKey.Enter:
                         jelenlegiKarakter = karakterek[index];
                         valaszt = false;
                         break;
+
                     case ConsoleKey.Escape:
                         valaszt = false;
                         break;
@@ -207,8 +275,10 @@
         static void KarakterKiirasa()
         {
             ConsoleColor elozoSzin = Console.ForegroundColor;
+
             Console.ForegroundColor = jelenlegiSzin;
             Console.Write(jelenlegiKarakter);
+
             Console.ForegroundColor = elozoSzin;
         }
 
@@ -227,6 +297,7 @@
             Console.WriteLine();
 
             bool fut = true;
+
             Console.SetCursorPosition(65, 12);
 
             while (fut)
@@ -305,17 +376,146 @@
                             rajzole = true;
                         }
                         break;
+
                     case ConsoleKey.M:
                         belsoMenu();
-
-
                         break;
 
+
                     case ConsoleKey.F1:
-                        Console.SetCursorPosition(26, 4);
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.Write('#');
-                        Console.ResetColor();
+                        Nyomda(new string[]
+                        {
+                            "#.#",
+                            ".#.",
+                            "#.#"
+                        });
+                        break;
+
+                    case ConsoleKey.F2:
+                        Nyomda(new string[]
+                        {
+                            "#...#",
+                            ".#.#.",
+                            "..#..",
+                            ".#.#.",
+                            "#...#"
+                        });
+                        break;
+
+                    case ConsoleKey.F3:
+                        Nyomda(new string[]
+                        {
+                            "#.....#",
+                            ".#...#.",
+                            "..#.#..",
+                            "...#...",
+                            "..#.#..",
+                            ".#...#.",
+                            "#.....#"
+                        });
+                        break;
+
+                    // KERESZT ALAKZATOK
+
+                    case ConsoleKey.F4:
+                        Nyomda(new string[]
+                        {
+                            ".#.",
+                            "###",
+                            ".#."
+                        });
+                        break;
+
+                    case ConsoleKey.F5:
+                        Nyomda(new string[]
+                        {
+                            "..#..",
+                            "..#..",
+                            "#####",
+                            "..#..",
+                            "..#.."
+                        });
+                        break;
+
+                    case ConsoleKey.F6:
+                        Nyomda(new string[]
+                        {
+                            "...#...",
+                            "...#...",
+                            "...#...",
+                            "#######",
+                            "...#...",
+                            "...#...",
+                            "...#..."
+                        });
+                        break;
+
+
+                    case ConsoleKey.F7:
+                        Nyomda(new string[]
+                        {
+                            "###",
+                            "#.#",
+                            "###"
+                        });
+                        break;
+
+                    case ConsoleKey.F8:
+                        Nyomda(new string[]
+                        {
+                            "#####",
+                            "#...#",
+                            "#...#",
+                            "#...#",
+                            "#####"
+                        });
+                        break;
+
+                    case ConsoleKey.F9:
+                        Nyomda(new string[]
+                        {
+                            "#######",
+                            "#.....#",
+                            "#.....#",
+                            "#.....#",
+                            "#.....#",
+                            "#.....#",
+                            "#######"
+                        });
+                        break;
+
+
+                    case ConsoleKey.F10:
+                        Nyomda(new string[]
+                        {
+                            ".#.",
+                            "#.#",
+                            ".#."
+                        });
+                        break;
+
+                    case ConsoleKey.F11:
+                        Nyomda(new string[]
+                        {
+                            "..#..",
+                            ".#.#.",
+                            "#...#",
+                            ".#.#.",
+                            "..#.."
+                        });
+                        break;
+
+                    case ConsoleKey.F12:
+                        Nyomda(new string[]
+                        {
+                            "...#...",
+                            "..#.#..",
+                            ".#...#.",
+                            "#.....#",
+                            ".#...#.",
+                            "..#.#..",
+                            "...#..."
+                        });
                         break;
 
                     case ConsoleKey.B:
@@ -326,7 +526,10 @@
                         break;
 
                     case ConsoleKey.L:
-                        string utvonal = Path.Combine(AppContext.BaseDirectory, "minta.txt");
+                        string utvonal = Path.Combine(
+                            AppContext.BaseDirectory,
+                            "minta.txt"
+                        );
 
                         if (File.Exists(utvonal))
                         {
