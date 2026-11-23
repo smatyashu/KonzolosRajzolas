@@ -20,6 +20,7 @@
 | 2026.11.20 | Gargya Dániel | Menü kiírása a rajzlap keretével együtt | - |
 | 2026.11.21 | Gargya Dániel | Mozgás a rajzlapon és adatok kiírása a menüben (pozíció stb.) | - |
 | 2026.11.22 | Serdült Mátyás | Az ecset használata (most már lehet rajzolni, ha letesszük az ecsetet), minta.txt fájl beillesztése helyesen | - |
+| 2026.11.23 | Gargya Dániel && Serdült Mátyás | a belső menü kiírása abban mozgás karaktertípus változtatása, szín változtatása | saját funkció, nyomdák |
 | … | … | … | … |
 
 ## Másik pár tesztje
