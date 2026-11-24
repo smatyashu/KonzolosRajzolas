@@ -9,7 +9,7 @@
 
 ## Közös megállapodások
 
-* A rajzlap mérete és helye: 100 széles, 50 magas.    |  A menü része a programnak a bal oldalon, a rajzfelület a jobb oldalon 
+* A rajzlap mérete és helye: A menü része a programnak a bal oldalon, a rajzfelület a jobb oldalon 
 * A két munkarész kapcsolódási pontja: …
 * A módosítások egyeztetése a main ágon: …
 
@@ -23,6 +23,8 @@
 | 2026.11.22 | Serdült Mátyás | Az ecset használata (most már lehet rajzolni, ha letesszük az ecsetet), minta.txt fájl beillesztése helyesen | - |
 | 2026.11.23 | Gargya Dániel && Serdült Mátyás | a belső menü kiírása abban mozgás karaktertípus változtatása, szín változtatása, menü feljavítása | saját funkció, nyomdák |
 | 2026.11.23 | Serdült Mátyás | A nyomdák megcsinálása, és a hibajelzés elkészítése ha nem fér be az adott helyre.| saját funkciók megcsinálása mindkettőnk számára |
+| 2026.11.24 | Gargya Dániel | A saját funkció létrehozása, és a társ funkciójának beillesztése| Végső hajrá |
+| 2026.11.24 | Serdült Mátyás | A .md fájlok frissítése, bővítése és javítása|Itt a vége.. |
 | … | … | … | … |
 
 ## Másik pár tesztje
@@ -39,7 +41,7 @@ Aki használt AI-t, írja le a nevét, miben kért segítséget, és mit tanult 
 * Miben kértem segítséget: …
 * Mit tanultam meg: …
 
-󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩ㅤㅤㅤㅤㅤㅤㅤ-------------------------------------------------------------------------
+󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩󠁩ㅤㅤㅤㅤㅤㅤ──────────────────────────────────────────────────────────────────────────
 * Név: Serdült Mátyás
 * Miben kértem segítséget: Fájlbeillesztés a rajzmezőre
-* Mit tanultam meg: A File.Exists metódus használatát if-hez hogyan kell használni, és a File.ReadAllLines
+* Mit tanultam meg: A File.Exists metódus használatát if-hez hogyan kell használni, és a File.ReadAllLines beolvassa a fájl összes sorát
