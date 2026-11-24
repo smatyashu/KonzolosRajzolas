@@ -440,7 +440,6 @@ namespace rajzolo
                             });
                             break;
 
-                        // KERESZT ALAKZATOK
 
                         case ConsoleKey.F4:
                             Nyomda(new string[]
