@@ -16,6 +16,8 @@ Visual Studióval
 ### Az alap rajzolón belüli
 **M:** A főmenü megnyitása
 
+**L:** A minta.txt fájl beillesztése
+
 **Escape:** Kilépés a kódból
 
 **Space:** A rajzecset felemelése/letétele
