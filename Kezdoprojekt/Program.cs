@@ -11,6 +11,16 @@ namespace rajzolo
         static int kurzorPozFentrol = 12;
         static char jelenlegiKarakter = '#';
         static ConsoleColor jelenlegiSzin = ConsoleColor.White;
+        static bool radiroz = false;
+        static bool szivarvany_mod = false;
+        static ConsoleColor[] szinek = {
+                ConsoleColor.Black, ConsoleColor.DarkBlue, ConsoleColor.DarkGreen,
+                ConsoleColor.DarkCyan, ConsoleColor.DarkRed, ConsoleColor.DarkMagenta,
+                ConsoleColor.DarkYellow, ConsoleColor.Gray, ConsoleColor.DarkGray,
+                ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan,
+                ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow,
+                ConsoleColor.White
+            };
 
         static void menuRajzolas(int magassag, int szelesseg)
         {
@@ -108,7 +118,8 @@ namespace rajzolo
                 }
 
                 Console.WriteLine();
-                Console.Write("".PadRight(40));
+                Console.WriteLine("".PadRight(40));
+                Console.WriteLine("".PadRight(40));
 
                 Console.SetCursorPosition(0, 7);
                 Console.WriteLine();
@@ -161,18 +172,14 @@ namespace rajzolo
             Console.WriteLine(" Nyilak: mozgás".PadRight(40));
             Console.WriteLine(" Szóköz: eszköz letétele/felvétele".PadRight(40));
             Console.WriteLine(" F1-F12: alakzat nyomdák".PadRight(40));
+            Console.WriteLine(" R: radírozás a rajzlapon".PadRight(40));
+            Console.WriteLine(" S: Szivárvány mód");
+            Console.WriteLine("".PadRight(40));
+            Console.WriteLine("".PadRight(40));
         }
 
         static void SzinValasztas()
         {
-            ConsoleColor[] szinek = {
-                ConsoleColor.Black, ConsoleColor.DarkBlue, ConsoleColor.DarkGreen,
-                ConsoleColor.DarkCyan, ConsoleColor.DarkRed, ConsoleColor.DarkMagenta,
-                ConsoleColor.DarkYellow, ConsoleColor.Gray, ConsoleColor.DarkGray,
-                ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan,
-                ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow,
-                ConsoleColor.White
-            };
 
             int index = Array.IndexOf(szinek, jelenlegiSzin);
             bool valaszt = true;
@@ -265,6 +272,7 @@ namespace rajzolo
                 _ => billentyu.ToString()
             };
 
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($" Billentyű: {billentyuSzoveg}".PadRight(40));
             Console.WriteLine($" Pozíció: ({kurzorPozBalrol - 41}, {kurzorPozFentrol - 1})".PadRight(20));
             Console.WriteLine($" Karakter: {jelenlegiKarakter}".PadRight(20));
@@ -277,134 +285,151 @@ namespace rajzolo
             ConsoleColor elozoSzin = Console.ForegroundColor;
 
             Console.ForegroundColor = jelenlegiSzin;
-            Console.Write(jelenlegiKarakter);
+            if (radiroz)
+            {
+                Console.Write(" ");
+                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+            }
+            else if(!radiroz && !szivarvany_mod)
+            {
+                Console.Write(jelenlegiKarakter);
 
-            Console.ForegroundColor = elozoSzin;
+                Console.ForegroundColor = elozoSzin;
+            }
+            else
+            {
+                int i = new Random().Next(szinek.Length);
+                Console.ForegroundColor = szinek[i];
+                Console.Write(jelenlegiKarakter);
+            }
         }
 
         static void Main(string[] args)
-        {
-            menuRajzolas(25, 51);
-
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine("=== KONZOLOS RAJZOLÓ ===");
-            Console.WriteLine(" M - Menü megnyitása");
-            Console.WriteLine(" Esc - Kilépés");
-            Console.WriteLine();
-            Console.WriteLine(" Nyilak: mozgás");
-            Console.WriteLine(" Szóköz: eszköz letétele/felvétele");
-            Console.WriteLine(" F1-F12: alakzat nyomdák");
-            Console.WriteLine();
-
-            bool fut = true;
-
-            Console.SetCursorPosition(65, 12);
-
-            while (fut)
             {
-                ConsoleKey billentyu = Console.ReadKey(true).Key;
+                menuRajzolas(25, 51);
 
-                AllapotKijelzes(billentyu);
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine("=== KONZOLOS RAJZOLÓ ===");
+                Console.WriteLine(" M - Menü megnyitása");
+                Console.WriteLine(" Esc - Kilépés");
+                Console.WriteLine();
+                Console.WriteLine(" Nyilak: mozgás");
+                Console.WriteLine(" Szóköz: eszköz letétele/felvétele");
+                Console.WriteLine(" F1-F12: alakzat nyomdák");
+                Console.WriteLine(" R: radírozás a rajzlapon".PadRight(40));
+                Console.WriteLine(" S: Szivárvány mód");
 
-                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                Console.WriteLine();
 
-                switch (billentyu)
+                bool fut = true;
+
+                Console.SetCursorPosition(65, 12);
+
+                while (fut)
                 {
-                    case ConsoleKey.UpArrow:
-                        if (kurzorPozFentrol > 1)
-                        {
-                            kurzorPozFentrol--;
+                    ConsoleKey billentyu = Console.ReadKey(true).Key;
 
+                    AllapotKijelzes(billentyu);
+
+                    Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+
+                    switch (billentyu)
+                    {
+                        case ConsoleKey.UpArrow:
+                            if (kurzorPozFentrol > 1)
+                            {
+                                kurzorPozFentrol--;
+
+                                if (rajzole)
+                                {
+                                    KarakterKiirasa();
+                                }
+
+                                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                            }
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                            if (kurzorPozFentrol < 24)
+                            {
+                                kurzorPozFentrol++;
+
+                                if (rajzole)
+                                {
+                                    KarakterKiirasa();
+                                }
+
+                                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                            }
+                            break;
+
+                        case ConsoleKey.LeftArrow:
+                            if (kurzorPozBalrol > 41)
+                            {
+                                kurzorPozBalrol--;
+
+                                if (rajzole)
+                                {
+                                    KarakterKiirasa();
+                                }
+
+                                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                            }
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                            if (kurzorPozBalrol < 90)
+                            {
+                                kurzorPozBalrol++;
+
+                                if (rajzole)
+                                {
+                                    KarakterKiirasa();
+                                }
+
+                                Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
+                            }
+                            break;
+
+                        case ConsoleKey.Spacebar:
                             if (rajzole)
                             {
-                                KarakterKiirasa();
+                                rajzole = false;
                             }
-
-                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
-                        }
-                        break;
-
-                    case ConsoleKey.DownArrow:
-                        if (kurzorPozFentrol < 24)
-                        {
-                            kurzorPozFentrol++;
-
-                            if (rajzole)
+                            else
                             {
-                                KarakterKiirasa();
+                                rajzole = true;
                             }
+                            break;
 
-                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
-                        }
-                        break;
+                        case ConsoleKey.M:
+                            belsoMenu();
+                            break;
 
-                    case ConsoleKey.LeftArrow:
-                        if (kurzorPozBalrol > 41)
-                        {
-                            kurzorPozBalrol--;
 
-                            if (rajzole)
+                        case ConsoleKey.F1:
+                            Nyomda(new string[]
                             {
-                                KarakterKiirasa();
-                            }
-
-                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
-                        }
-                        break;
-
-                    case ConsoleKey.RightArrow:
-                        if (kurzorPozBalrol < 90)
-                        {
-                            kurzorPozBalrol++;
-
-                            if (rajzole)
-                            {
-                                KarakterKiirasa();
-                            }
-
-                            Console.SetCursorPosition(kurzorPozBalrol, kurzorPozFentrol);
-                        }
-                        break;
-
-                    case ConsoleKey.Spacebar:
-                        if (rajzole)
-                        {
-                            rajzole = false;
-                        }
-                        else
-                        {
-                            rajzole = true;
-                        }
-                        break;
-
-                    case ConsoleKey.M:
-                        belsoMenu();
-                        break;
-
-
-                    case ConsoleKey.F1:
-                        Nyomda(new string[]
-                        {
                             "#.#",
                             ".#.",
                             "#.#"
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F2:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F2:
+                            Nyomda(new string[]
+                            {
                             "#...#",
                             ".#.#.",
                             "..#..",
                             ".#.#.",
                             "#...#"
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F3:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F3:
+                            Nyomda(new string[]
+                            {
                             "#.....#",
                             ".#...#.",
                             "..#.#..",
@@ -412,34 +437,34 @@ namespace rajzolo
                             "..#.#..",
                             ".#...#.",
                             "#.....#"
-                        });
-                        break;
+                            });
+                            break;
 
-                    // KERESZT ALAKZATOK
+                        // KERESZT ALAKZATOK
 
-                    case ConsoleKey.F4:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F4:
+                            Nyomda(new string[]
+                            {
                             ".#.",
                             "###",
                             ".#."
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F5:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F5:
+                            Nyomda(new string[]
+                            {
                             "..#..",
                             "..#..",
                             "#####",
                             "..#..",
                             "..#.."
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F6:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F6:
+                            Nyomda(new string[]
+                            {
                             "...#...",
                             "...#...",
                             "...#...",
@@ -447,33 +472,33 @@ namespace rajzolo
                             "...#...",
                             "...#...",
                             "...#..."
-                        });
-                        break;
+                            });
+                            break;
 
 
-                    case ConsoleKey.F7:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F7:
+                            Nyomda(new string[]
+                            {
                             "###",
                             "#.#",
                             "###"
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F8:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F8:
+                            Nyomda(new string[]
+                            {
                             "#####",
                             "#...#",
                             "#...#",
                             "#...#",
                             "#####"
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F9:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F9:
+                            Nyomda(new string[]
+                            {
                             "#######",
                             "#.....#",
                             "#.....#",
@@ -481,33 +506,33 @@ namespace rajzolo
                             "#.....#",
                             "#.....#",
                             "#######"
-                        });
-                        break;
+                            });
+                            break;
 
 
-                    case ConsoleKey.F10:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F10:
+                            Nyomda(new string[]
+                            {
                             ".#.",
                             "#.#",
                             ".#."
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F11:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F11:
+                            Nyomda(new string[]
+                            {
                             "..#..",
                             ".#.#.",
                             "#...#",
                             ".#.#.",
                             "..#.."
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.F12:
-                        Nyomda(new string[]
-                        {
+                        case ConsoleKey.F12:
+                            Nyomda(new string[]
+                            {
                             "...#...",
                             "..#.#..",
                             ".#...#.",
@@ -515,54 +540,60 @@ namespace rajzolo
                             ".#...#.",
                             "..#.#..",
                             "...#..."
-                        });
-                        break;
+                            });
+                            break;
 
-                    case ConsoleKey.B:
-                        if (OperatingSystem.IsWindows())
-                            Console.Beep(800, 120);
-                        else
-                            Console.Write("\a");
-                        break;
+                        case ConsoleKey.B:
+                            if (OperatingSystem.IsWindows())
+                                Console.Beep(800, 120);
+                            else
+                                Console.Write("\a");
+                            break;
 
-                    case ConsoleKey.L:
-                        string utvonal = Path.Combine(
-                            AppContext.BaseDirectory,
-                            "minta.txt"
-                        );
+                        case ConsoleKey.L:
+                            string utvonal = Path.Combine(
+                                AppContext.BaseDirectory,
+                                "minta.txt"
+                            );
 
-                        if (File.Exists(utvonal))
-                        {
-                            string[] sorok = File.ReadAllLines(utvonal);
-
-                            for (int i = 0; i < sorok.Length && i < 24; i++)
+                            if (File.Exists(utvonal))
                             {
-                                Console.SetCursorPosition(41, 1 + i);
+                                string[] sorok = File.ReadAllLines(utvonal);
 
-                                string szoveg = sorok[i];
-
-                                if (szoveg.Length > 49)
+                                for (int i = 0; i < sorok.Length && i < 24; i++)
                                 {
-                                    szoveg = szoveg.Substring(0, 49);
+                                    Console.SetCursorPosition(41, 1 + i);
+
+                                    string szoveg = sorok[i];
+
+                                    if (szoveg.Length > 49)
+                                    {
+                                        szoveg = szoveg.Substring(0, 49);
+                                    }
+
+                                    Console.Write(szoveg);
                                 }
-
-                                Console.Write(szoveg);
                             }
-                        }
-                        else
-                        {
-                            Console.SetCursorPosition(41, 1);
-                            Console.Write("A mintafájl nem található.");
-                        }
-                        break;
+                            else
+                            {
+                                Console.SetCursorPosition(41, 1);
+                                Console.Write("A mintafájl nem található.");
+                            }
+                            break;
+                        case ConsoleKey.R:
+                            radiroz = !radiroz;
+                            break;
+                        case ConsoleKey.S:
+                            szivarvany_mod = !szivarvany_mod;
+                            break;
 
-                    case ConsoleKey.Escape:
-                        fut = false;
-                        break;
+                        case ConsoleKey.Escape:
+                            fut = false;
+                            break;
+                    }
                 }
-            }
 
-            Console.ResetColor();
+                Console.ResetColor();
+            }
         }
     }
-}
